@@ -37,7 +37,7 @@ class AuthService
     }
 
     public function generateToken(): array
-    {   
+    {
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             $user = Auth::user();
