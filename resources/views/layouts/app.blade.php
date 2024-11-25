@@ -80,6 +80,12 @@
         button a {
             color: #fff;
         }
+
+        img {
+            display: inline-block;
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 

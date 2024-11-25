@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
@@ -33,6 +33,11 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $task = Task::create($request->validated());
+
+        if ($request->hasFile('image')) {
+            $task->image = Storage::put(Task::IMAGE_PATH, $request->file('image'));
+            $task->save();
+        }
         return redirect()->route('tasks.show', $task);
     }
 
@@ -61,7 +66,16 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+
         $task->update($request->validated());
+        if ($request->hasFile('image')) {
+            $task->deleteImage();
+        }
+        if ($request->hasFile('image')) {
+            $task->image = Storage::put(Task::IMAGE_PATH, $request->file('image'));
+        }
+        $task->save();
+
         return redirect()->route('tasks.show', $task);
     }
 
@@ -71,6 +85,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
+        $task->deleteImage();
         return redirect()->route('tasks.index');
     }
 }

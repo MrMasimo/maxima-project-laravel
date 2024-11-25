@@ -38,6 +38,11 @@ class UpdateTaskRequest extends FormRequest
                 'nullable',
                 'string',
             ],
+            'image' => [
+                'bail',
+                'nullable',
+                'image',
+            ],
         ];
     }
 }
